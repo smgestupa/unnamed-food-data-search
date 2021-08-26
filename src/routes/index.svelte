@@ -27,7 +27,7 @@
     }
 
     const randomFood = async () => {
-        const res = await fetch( 'static/files/foods.txt' )
+        const res = await fetch( '/files/foods.txt' )
             .then( data => data.text() )
             .then( response => {
                 const food = response.split( '\n' );

@@ -25,6 +25,14 @@
         $food_data = data.results;
         hasResults = true;
     }
+
+    const randomFood = async () => {
+        const res = await fetch( `./api/random_food` );
+        const data = await res.json();
+        search_inquiry = data.results;
+
+        await search( search_inquiry );
+    }
 </script>
 
 <div class="flex justify-center bg-gray-800" style="min-height: 100vh">
@@ -47,7 +55,7 @@
             <input class='pl-14 rounded-full w-custom h-16 outline-none' type="text" placeholder="Search here!" bind:value={ search_inquiry } />
             <div class="mt-8 flex justify-center">
                 <button class="mx-2.5 rounded-lg bg-gray-200 px-16 py-2 hover:bg-gray-300 duration-300" on:click={ search( search_inquiry ) }>Search</button>
-                <button class="mx-2.5 rounded-lg bg-gray-200 px-10 py-2 hover:bg-gray-300 duration-300">Random Food</button>
+                <button class="mx-2.5 rounded-lg bg-gray-200 px-10 py-2 hover:bg-gray-300 duration-300" on:click={ randomFood }>Random Food</button>
             </div>
         </div>
         <!-- /SEARCH BAR -->
@@ -170,7 +178,7 @@
                                                 <h3 class="font-bold">
                                                     Quantity:
                                                     <span class="font-normal">
-                                                        { #if food.product_quantity !== '' }
+                                                        { #if typeof food.product_quantity !== 'undefined' || food.product_quantity !== '' }
                                                             { food.product_quantity }
                                                         { :else }
                                                             ? ? ?
@@ -184,10 +192,8 @@
                                                 <h3 class="font-bold">
                                                     Packaging:
                                                     <span class="font-normal">
-                                                        { #if typeof food.packaging !== 'undefined' }
-                                                            { #if food.packaging !== '' }
-                                                                { food.packaging.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
-                                                            { /if }
+                                                        { #if typeof food.packaging !== 'undefined' || food.packaging !== '' }
+                                                            { food.packaging.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?
                                                         { /if }
@@ -200,7 +206,7 @@
                                                 <h3 class="font-bold">
                                                     Brands:
                                                     <span class="font-normal">
-                                                        { #if food.brands !== '' }
+                                                        { #if typeof food.brands !== 'undefined' }
                                                             { food.brands.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?

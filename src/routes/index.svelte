@@ -8,7 +8,7 @@
     let search_inquiry = '', lastSearch_inquiry = '';
     let hasResults = false, firstSearch = true;
 
-    const no_image = 'src/assets/missing-image.jpg';
+    const no_image = 'assets/missing-image.jpg';
 
     const search = async ( food ) => {
         if ( food.length === 0 ) return alert( 'lmao' );

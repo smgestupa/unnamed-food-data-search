@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
 
-    const loading_animation = './../assets/loading-animation.gif';
+    const loading_animation = '/src/assets/loading-animation.gif';
 </script>
 
 <div class='text-center mt-40' in:fade={ { duration: 1000 } }>

@@ -14,7 +14,7 @@
             <nav class="text-white uppercase">
                 <a href="#" class="mx-3.5">Home</a>
                 <a href="#" class="mx-3.5">About</a>
-                <a href="#" class="mx-3.5">My Other Projects</a>
+                <a href="https://gitlab.com/laazyCmd" class="mx-3.5">My Other Projects</a>
             </nav>
         </div>
         <!-- /NAV -->

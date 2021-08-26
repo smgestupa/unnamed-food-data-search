@@ -8,7 +8,7 @@
     let search_inquiry = '', lastSearch_inquiry = '';
     let hasResults = false, firstSearch = true;
 
-    const no_image = 'assets/missing-image.jpg';
+    const no_image = '/missing-image.jpg';
 
     const search = async ( food ) => {
         if ( food.length === 0 ) return alert( 'lmao' );
@@ -214,8 +214,10 @@
                                                 <h3 class="font-bold">
                                                     Categories:
                                                     <span class="font-normal">
-                                                        { #if food.categories !== '' }
-                                                            { food.categories.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
+                                                        { #if typeof food.categories !== 'undefined' }
+                                                            { #if food.categories !== '' }
+                                                                { food.categories.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
+                                                            { /if }
                                                         { :else }
                                                             ? ? ?
                                                         { /if }

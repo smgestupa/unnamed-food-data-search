@@ -16,5 +16,8 @@
     "svelte": "^3.34.0",
     "tailwindcss": "^2.2.7"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
 }

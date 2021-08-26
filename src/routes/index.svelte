@@ -27,11 +27,15 @@
     }
 
     const randomFood = async () => {
-        const res = await fetch( `./api/random_food` );
-        const data = await res.json();
-        search_inquiry = data.results;
+        const res = await fetch( 'static/files/foods.txt' )
+            .then( data => data.text() )
+            .then( response => {
+                const food = response.split( '\n' );
+                const random_food = food[ Math.floor( Math.random() * food.length - 1 ) ];
+                search_inquiry = random_food;
 
-        await search( search_inquiry );
+                search( random_food );
+            } );
     }
 </script>
 
@@ -76,10 +80,10 @@
                                 <div class="flex">
                                     <div class="my-2.5 mx-3">
                                         <!-- PRODUCT LOGO -->
-                                        { #if food.image_url === '' || typeof food.image_url === 'undefined' }
-                                            <img class='rounded-lg' style='width: 25rem; height: 17rem;' src={ no_image } alt="">
-                                        { :else }
+                                        { #if typeof food.image_url !== 'undefined' }
                                             <img class='rounded-lg' style='width: 25rem; height: 17rem;' src={ food.image_url } alt="">
+                                        { :else }
+                                            <img class='rounded-lg' style='width: 25rem; height: 17rem;' src={ no_image } alt="">
                                         { /if }
                                         <!-- /PRODUCT LOGO -->
                                         <div>
@@ -101,9 +105,9 @@
                                                         Ingredients list:
                                                     </h1>
                                                     <span class="mt-0.5">
-                                                        { #if food.ingredients_text_en !== '' }
+                                                        { #if typeof food.ingredients_text_en !== 'undefined' }
                                                             { food.ingredients_text_en }
-                                                        { :else if food.ingredients_text_fr !== '' }
+                                                        { :else if typeof food.ingredients_text_fr !== 'undefined' }
                                                             { food.ingredients_text_fr }
                                                         { :else }
                                                             ? ? ?
@@ -130,16 +134,16 @@
                                         </div>
                                         <!-- /INGREDIENTS -->
                                     </div>
-                                    <div class="my-3 ml-1.5 mr-1">
+                                    <div class="my-3 ml-1.5 mr-1" style="width: 25rem;">
                                         <!-- PRODUCT TITLE -->
                                         <h1 class="text-3xl">
-                                            { #if food.abbreviated_product_name !== '' && typeof food.abbreviated_product_name !== 'undefined' }
+                                            { #if typeof food.abbreviated_product_name !== 'undefined' && food.abbreviated_product_name !== '' }
                                                 { food.abbreviated_product_name }
-                                            { :else if food.abbreviated_product_name_fr !== '' && typeof food.abbreviated_product_name_fr !== 'undefined' }
+                                            { :else if typeof food.abbreviated_product_name_fr !== 'undefined' && food.abbreviated_product_name_fr !== '' }
                                                 { food.abbreviated_product_name_fr }
-                                            { :else if food.product_name_en !== '' }
+                                            { :else if typeof food.product_name_en !== 'undefined' && food.product_name_en !== '' }
                                                 { food.product_name_en }
-                                            { :else if food.product_name_fr !== '' }
+                                            { :else if typeof food.product_name_fr !== 'undefined' && food.product_name_fr !== '' }
                                                 { food.product_name_fr }
                                             { :else }
                                                 ? ? ?
@@ -148,7 +152,7 @@
                                         <h3 class="mt-1.5 text-md font-bold">
                                             Serving Size:
                                             <span class="font-normal">
-                                                { #if food.serving_quantity !== '' }
+                                                { #if typeof food.serving_quantity !== 'undefined' && food.serving_quantity !== '' }
                                                     { food.serving_quantity }
                                                 { :else }
                                                     ? ? ?
@@ -158,7 +162,7 @@
                                         </h3>
                                         <h3 class="mt-1.5 text-md">
                                             Barcode:
-                                            { #if food.id !== '' }
+                                            { #if typeof food.id !== 'undefined' && food.id !== '' }
                                                 { food._id }
                                             { :else }
                                                 ? ? ?
@@ -177,8 +181,9 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Quantity:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.product_quantity !== 'undefined' || food.product_quantity !== '' }
+                                                        { #if typeof food.product_quantity !== 'undefined' && food.product_quantity !== '' }
                                                             { food.product_quantity }
                                                         { :else }
                                                             ? ? ?
@@ -191,8 +196,9 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Packaging:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.packaging !== 'undefined' || food.packaging !== '' }
+                                                        { #if typeof food.packaging !== 'undefined' && food.packaging !== '' }
                                                             { food.packaging.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?
@@ -205,8 +211,9 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Brands:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.brands !== 'undefined' }
+                                                        { #if typeof food.brands !== 'undefined' && food.brands !== '' }
                                                             { food.brands.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?
@@ -219,11 +226,10 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Categories:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.categories !== 'undefined' }
-                                                            { #if food.categories !== '' }
-                                                                { food.categories.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
-                                                            { /if }
+                                                        { #if typeof food.categories !== 'undefined' && food.categories !== '' }
+                                                            { food.categories.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?
                                                         { /if }
@@ -235,11 +241,10 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Labels, Certifications, Awards:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.labels !== 'undefined' }
-                                                            { #if food.labels !== '' }
-                                                                { food.labels.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
-                                                            { /if }
+                                                        { #if typeof food.labels !== 'undefined' && food.labels !== '' }
+                                                            { food.labels.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?
                                                         { /if }
@@ -252,7 +257,7 @@
                                                 <h3 class="font-bold">
                                                     Link to the product page on the official site of the producer:
                                                     <br>
-                                                    { #if food.link !== '' }
+                                                    { #if typeof food.link !== 'undefined' && food.link !== '' }
                                                         <span class="font-normal text-blue-500 hover:text-blue-600 duration-300">
                                                             <a href={ food.link }>
                                                                 { food.link }
@@ -270,11 +275,10 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Stores:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.stores !== 'undefined' }
-                                                            { #if food.stores !== '' }
-                                                                { food.stores.replace( /,/g, ', ' ) }
-                                                            { /if }
+                                                        { #if typeof food.stores !== 'undefined' && food.stores !== '' }
+                                                            { food.stores.replace( /,/g, ', ' ).replace( /en:/g, '' ).replace( /fr:/g, '' ) }
                                                         { :else }
                                                             ? ? ?
                                                         { /if }
@@ -286,11 +290,10 @@
                                             <div class="mt-3 mb-5">
                                                 <h3 class="font-bold">
                                                     Countries where sold:
+                                                    <br>
                                                     <span class="font-normal">
-                                                        { #if typeof food.countries !== 'undefined' }
-                                                            { #if food.countries !== '' }
-                                                                { food.countries.replace( /,/g, ', ' ) }
-                                                            { /if }
+                                                        { #if typeof food.countries !== 'undefined' && food.countries !== '' }
+                                                            { food.countries.replace( /,/g, ', ' ) }
                                                         { :else }
                                                             ? ? ?
                                                         { /if }
